@@ -1,12 +1,62 @@
+stationcode="""                                                                                                                                                                                         
+ALLP    Alappuzha
+AWY     Aluva
+CLT     Calicut
+CAN     Cannanore
+CKI     Chalakudi
+CGY     Changanacherry
+ERS     Ernakulam Junction
+ERN     Ernakulam Town
+KGQ     Kasaragod
+KYJ     Kayamkulam
+KZK     Kazhakuttam
+QLN     Kollam Junction
+KTYM    Kottayam
+QLD     Koyilandy
+KTU     Kuttippuram
+PGTN    Palakkad Town
+SRR     Shoranur
+TVP     Thiruvananthapuram Pettah
+TCR     Trichur
+TVC     Trivandrum Central
+KCVL    Trivandrum Kochuveli
+ 
+ -------------outside kerala--------------
+  
+Chennai Central (MAS)
+Chennai Egmore (MS)
+Bangalore Cy Junction (SBC)
+Bangalore East (BNCE)
+Hyderabad Decan (HYB)
+Secunderabad Junction (SC)
+Mumbai Central (BCT)
+Pune Junction (PUNE)
+Madgaon (MAO)
+New Delhi (NDLS)
+Kolkata (CP)
+Srinagar (SNAR)
+Kanyakumari (CAPE)
+Patna Junction (PNBE) 
+ """
+
 HELP_TEXT = """this is my first attempt to make a bot ...
     there will be some errors kindly excuse.........
     maintained by @prinzpiuz 
     for more news subscribe to my channel @princepiuz   
-    for help please enter /help  """
+    for help please enter /help 
+    source code is available 
+    https://github.com/prinzpiuz/RailwayStatusBot
+    suggetions and contributions are always welcome
+    #FreeAsInFreedom
+
+    """
 help="""for listings trains between stations use 
       /trains <start> <destination>
       eg: for travelling from aluva to banglore enter 
-      /trains awy sbc"""
+      /trains awy sbc
+      for listing short station codes 
+      /code
+      """
 import configparser
 import urllib3
 import json
@@ -52,11 +102,16 @@ def trains(bot, update, args):
         update.message.reply_text(help)
    # text="trains between  " +args[0]+ " and  " +args[1]+"  updating soon"
    # update.message.reply_text(text) 
+def code(bot, update):
+    update.message.reply_text(stationcode)
 def help(bot, update):
     help="""for listings trains between stations use 
     /trains <start> <destination>
     eg: for travelling from aluva to banglore enter  
-    /trains awy sbc """
+    /trains awy sbc 
+    for listing short code for stations use
+    /code
+    """
     update.message.reply_text(help)
 def main():
     updater = Updater(token)
@@ -65,6 +120,7 @@ def main():
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("trains", trains, pass_args=True))
     dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("code",code))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
