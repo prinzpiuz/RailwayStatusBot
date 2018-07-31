@@ -59,7 +59,13 @@ help="""for listings trains between stations use
       for listing trains on particular date
       /date <start> <dest> <dd> <mm> <yyyy>
       eg: /date awy sbc 15 08 2018
-      """
+"""
+import logging
+logging.basicConfig(
+    filename="Rail.log",
+    level=logging.DEBUG,
+    format="%(asctime)s:%(levelname)s:%(message)s"
+    )
 import configparser
 import urllib3
 import json
@@ -71,8 +77,8 @@ config = configparser.RawConfigParser()
 config.read('rail.cfg')
 token=config.get('telegram','token')
 key=config.get('railwayAPI','key')
-print(key)
-print(token)
+logging.debug(key)
+logging.debug(token)
 def start(bot, update):
      update.message.reply_text(HELP_TEXT)
 def trains(bot, update, args):
@@ -81,7 +87,7 @@ def trains(bot, update, args):
         date=datetime.datetime.today().strftime('%d-%m-%Y')
         http = urllib3.PoolManager()
         api="https://api.railwayapi.com/v2/between/source/"+args[0]+"/dest/"+args[1]+"/date/"+date+"/apikey/"+key+"/"
-        print(api)
+        logging.debug(api)
         r = http.request('GET', api)
         data = json.loads(r.data.decode('utf-8'))
         if data['response_code'] != 200:
@@ -91,7 +97,7 @@ def trains(bot, update, args):
         else:
         	
         	update.message.reply_text(text)
-  #      print(len(data['trains']))
+  #      logging.debug(len(data['trains']))
         	for i in range(0,len(data['trains'])):
         		update.message.reply_text("""train named  """+data['trains'][i]['name']+" with train number: #"+data['trains'][i]['number']+"""
           from  """+data['trains'][i]['from_station']['name']+
@@ -99,8 +105,8 @@ def trains(bot, update, args):
           starting at """+data['trains'][i]['src_departure_time']+" and arriving at  "+data['trains'][i]['dest_arrival_time']+"""
          total travel time is:"""+data['trains'][i]['travel_time'])
         		
-#            print(data['trains'][i]['to_station'])
- #           print(data['trains'][i]['from_station'])
+#            logging.debug(data['trains'][i]['to_station'])
+ #           logging.debug(data['trains'][i]['from_station'])
             	
 #            update.message.reply_text(data['trains'][i])
     elif len(args) < 2:
@@ -116,10 +122,10 @@ def trains(bot, update, args):
 def date(bot, update, args):
     if len(args)==5:
         textdate="trains between  " +args[0]+ " and  " +args[1]+"  on date "+args[2]+"-"+args[3]+"-"+args[4]+"  are............."
-        #print(text)
+        #logging.debug(text)
         http = urllib3.PoolManager()
         apidate="https://api.railwayapi.com/v2/between/source/"+args[0]+"/dest/"+args[1]+"/date/"+args[2]+"-"+args[3]+"-"+args[4]+"/apikey/"+key+"/"
-        print(apidate)
+        logging.debug(apidate)
         r = http.request('GET', apidate)
         data = json.loads(r.data.decode('utf-8'))
         if data['response_code'] != 200:
@@ -130,7 +136,7 @@ def date(bot, update, args):
         else:
         	
         	update.message.reply_text(textdate)
-  #      print(len(data['trains']))
+  #      logging.debug(len(data['trains']))
         	for i in range(0,len(data['trains'])):
         		update.message.reply_text("""train named  """+data['trains'][i]['name']+" with train number: #"+data['trains'][i]['number']+"""
           from  """+data['trains'][i]['from_station']['name']+
@@ -138,7 +144,7 @@ def date(bot, update, args):
           starting at """+data['trains'][i]['src_departure_time']+" and arriving at  "+data['trains'][i]['dest_arrival_time']+"""
          total travel time is:"""+data['trains'][i]['travel_time'])
         
-  #      print(len(data['trains']))
+  #      logging.debug(len(data['trains']))
         
     elif len(args) < 5:
         less="""need start and destination and date in dd-mm-yyyy
