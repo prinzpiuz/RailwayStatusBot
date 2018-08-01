@@ -39,15 +39,16 @@ Kanyakumari (CAPE)
 Patna Junction (PNBE) 
  """
 
-HELP_TEXT = """this is my first attempt to make a bot ...
-    there will be some errors kindly excuse.........
+HELP_TEXT = """
+    this bot helps to get services offered by  NTES
     maintained by @prinzpiuz 
     for more news subscribe to my channel @princepiuz   
     for help please enter /help 
-    source code is available 
+    source code is available @
     https://github.com/prinzpiuz/RailwayStatusBot
     suggetions and contributions are always welcome
     #FreeAsInFreedom
+    NB:as part of privacy this bot never collects or store any kind data of users
 
     """
 help="""for listings trains between stations use 
