@@ -161,7 +161,12 @@ def code(bot, update):
 def pnr(bot, update, args):
     http = urllib3.PoolManager()
     PNR="https://api.railwayapi.com/v2/pnr-status/pnr/"+args[0]+"/apikey/"+key+"/"
+    logging.debug(api)
+    r = http.request('GET', api)
+    data = json.loads(r.data.decode('utf-8'))
+    if data['response_code'] != 200:
 
+    
 def help(bot, update):
     help="""for listings trains between stations use 
     /trains <start> <destination>
