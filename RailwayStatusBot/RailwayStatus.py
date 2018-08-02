@@ -51,7 +51,8 @@ HELP_TEXT = """
     NB:as part of privacy this bot never collects or store any kind data of users
 
     """
-help="""for listings trains between stations use 
+help="""
+      for listings trains between stations use 
       /trains <start> <destination>
       eg: for travelling from aluva to banglore enter 
       /trains awy sbc
@@ -82,6 +83,7 @@ logging.info(key)
 logging.info(token)
 def start(bot, update):
      update.message.reply_text(HELP_TEXT)
+     update.message.reply_text(help)
 def trains(bot, update, args):
     if len(args)==2:
         text="trains between  " +args[0]+ " and  " +args[1]+"  are............."
@@ -139,11 +141,11 @@ def date(bot, update, args):
         	update.message.reply_text(textdate)
   #      logging.info(len(data['trains']))
         	for i in range(0,len(data['trains'])):
-        		update.message.reply_text("""train named  """+data['trains'][i]['name']+" with train number: #"+data['trains'][i]['number']+"""
-          from  """+data['trains'][i]['from_station']['name']+
+        		update.message.reply_text("""train named  """+data['trains'][i]['name']+" with train number: <b>"+data['trains'][i]['number']+"""
+         </b> from  """+data['trains'][i]['from_station']['name']+
           """ to """+ data['trains'][i]['to_station']['name']+ """ 
           starting at """+data['trains'][i]['src_departure_time']+" and arriving at  "+data['trains'][i]['dest_arrival_time']+"""
-         total travel time is:"""+data['trains'][i]['travel_time'])
+         total travel time is:"""+data['trains'][i]['travel_time'],parse_mode=ParseMode.HTML)
         
   #      logging.info(len(data['trains']))
         
