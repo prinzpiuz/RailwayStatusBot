@@ -158,6 +158,10 @@ def date(bot, update, args):
         update.message.reply_text(help)
 def code(bot, update):
     update.message.reply_text(stationcode)
+def pnr(bot, update, args):
+    http = urllib3.PoolManager()
+    PNR="https://api.railwayapi.com/v2/pnr-status/pnr/"+args[0]+"/apikey/"+key+"/"
+
 def help(bot, update):
     help="""for listings trains between stations use 
     /trains <start> <destination>
@@ -179,6 +183,8 @@ def main():
     dp.add_handler(CommandHandler("date",date, pass_args=True))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("code",code))
+    dp.add_handler(CommandHandler("pnr",pnr))
+
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
