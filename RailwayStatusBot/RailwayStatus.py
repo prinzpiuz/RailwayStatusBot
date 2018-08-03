@@ -59,6 +59,8 @@ help="""for listings trains between stations use
       for listing trains on particular date
       /date <start> <dest> <dd> <mm> <yyyy>
       eg: /date awy sbc 15 08 2018
+      for gettting the status of your PNR
+      /pnr <pnr no>
 """
 import logging
 logging.basicConfig(
@@ -160,11 +162,30 @@ def code(bot, update):
     update.message.reply_text(stationcode)
 def pnr(bot, update, args):
     http = urllib3.PoolManager()
+   # print(args[0])
     PNR="https://api.railwayapi.com/v2/pnr-status/pnr/"+args[0]+"/apikey/"+key+"/"
-    logging.debug(api)
-    r = http.request('GET', api)
+    logging.debug(PNR)
+    r = http.request('GET', PNR)
     data = json.loads(r.data.decode('utf-8'))
     if data['response_code'] != 200:
+        alertp="are you sure with your PNR no "+args[0]+" ?"
+        update.message.reply_text(alertp)
+    else:
+        update.message.reply_text("processing .........")
+        msg="""your status for PNR no """+args[0]+"""  for journey starting from
+        """+ data['boarding_point']['name']+ """ to """+data['reservation_upto']['name']+"""
+        in train """+data['train']['name']+""" with no """+data['train']['number']+"""
+        in """+ data['journey_class']['name']+"""with following people bellow."""
+        update.message.reply_text(msg)
+        for i in range(0,len(data['passengers'])):
+                print(len(data['passengers']))
+                update.message.reply_text("""
+           person """ +data['passenger'][i]['no']+""". current status: """+data['passenger'][i]['current_status']+""" 
+           and booking status: """+data['passenger'][i]['booking_status'])
+
+
+
+
 
     
 def help(bot, update):
@@ -188,7 +209,7 @@ def main():
     dp.add_handler(CommandHandler("date",date, pass_args=True))
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("code",code))
-    dp.add_handler(CommandHandler("pnr",pnr))
+    dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
 
     updater.start_polling()
     updater.idle()
