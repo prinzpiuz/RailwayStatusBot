@@ -40,6 +40,7 @@ Patna Junction (PNBE)
  """
 
 HELP_TEXT = """
+    what this bot can do ..?
     this bot helps to get services offered by  NTES
     maintained by @prinzpiuz 
     for more news subscribe to my channel @princepiuz   
@@ -51,19 +52,6 @@ HELP_TEXT = """
     NB:as part of privacy this bot never collects or store any kind data of users
 
     """
-help="""
-      for listings trains between stations use 
-      /trains <start> <destination>
-      eg: for travelling from aluva to banglore enter 
-      /trains awy sbc
-      for listing short station codes 
-      /code
-      for listing trains on particular date
-      /date <start> <dest> <dd> <mm> <yyyy>
-      eg: /date awy sbc 15 08 2018
-      for gettting the status of your PNR
-      /pnr <pnr no>
-"""
 import logging
 logging.basicConfig(
     filename="Rail.log",
@@ -84,8 +72,8 @@ key=config.get('railwayAPI','key')
 logging.info(key)
 logging.info(token)
 def start(bot, update):
-     update.message.reply_text(HELP_TEXT)
-     update.message.reply_text(help)
+
+    update.message.reply_text(HELP_TEXT)
 def trains(bot, update, args):
     if len(args)==2:
         text="trains between  " +args[0]+ " and  " +args[1]+"  are............."
@@ -192,16 +180,25 @@ def pnr(bot, update, args):
 
     
 def help(bot, update):
-    help="""for listings trains between stations use 
-    /trains <start> <destination>
-    eg: for travelling from aluva to banglore enter  
-    /trains awy sbc 
-    for listing short code for stations use
-    /code
-    for getting trains on particular date use
-    /date <start> <dest> <dd> <mm> <yyyy>
-    eg: /date awy sbc 08 09 2018
-    """
+
+
+    help = """
+      what this bot can do ..?
+      this bot helps to get services offered by  NTES
+      available commands and their usage 
+      for listings trains between stations use 
+      /trains <start> <destination>
+      eg: for travelling from aluva to banglore enter 
+      /trains awy sbc
+      for listing short station codes 
+      /code
+      for listing trains on particular date
+      /date <start> <dest> <dd> <mm> <yyyy>
+      eg: /date awy sbc 15 08 2018
+      for gettting the status of your PNR
+      /pnr <pnr no>
+"""
+
     update.message.reply_text(help)
 def main():
     updater = Updater(token)
