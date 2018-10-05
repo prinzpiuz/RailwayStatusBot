@@ -248,7 +248,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("code",code))
     dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
-
+    dp.add_handler(CommandHandler("live", live, pass_args=True))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
