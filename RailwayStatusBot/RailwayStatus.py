@@ -175,10 +175,48 @@ def pnr(bot, update, args):
            and booking status: """+data['passenger'][i]['booking_status'])
 
 
+def live(bot, update, args):
+    """Gives the live position of a train.
+    Required args are the train number and the date
+    """
+    http = urllib3.PoolManager()
+    try:
+        train_number, date = args
+    except ValueError as exc:
+        update.message.reply_text(
+            'only need train number and date '
+            'eg: /live 12046 01-12-2018'
+            )
+    else:
+        # for now we won't implement a date validator
+        LIVE = (
+            'https://api.railwayapi.com/v2/live'
+            '/train/{train_number}'
+            '/date/{date}'
+            '/apikey/{key}'
+            ).format(
+                train_number=train_number,
+                date=date,
+                key=key
+                )
+        r = http.request('GET', LIVE)
+        data = json.loads(r.data.decode('utf-8'))
+        if data['response_code'] != 200:
+            alert = "something went wrong"
+            update.message.reply_text(alert)
+        else:
+            train_name = data['train']['name']
+            position = data['position']
+            msg = (
+                'Train: {name}\n'
+                'Status: {position}'
+                ).format(
+                    name=train_name,
+                    position=position
+                    )
+            update.message.reply_text(msg)
 
 
-
-    
 def help(bot, update):
 
 
@@ -210,7 +248,7 @@ def main():
     dp.add_handler(CommandHandler("help", help))
     dp.add_handler(CommandHandler("code",code))
     dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
-
+    dp.add_handler(CommandHandler("live", live, pass_args=True))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
