@@ -233,8 +233,10 @@ def help(bot, update):
       for listing trains on particular date
       /date <start> <dest> <dd> <mm> <yyyy>
       eg: /date awy sbc 15 08 2018
-      for gettting the status of your PNR
+      for getting the status of your PNR
       /pnr <pnr no>
+      for getting live train status
+      /live train# 15-08-2018
 """
 
     update.message.reply_text(help)
