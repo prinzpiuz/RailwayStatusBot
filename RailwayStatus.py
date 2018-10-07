@@ -267,12 +267,12 @@ def arrivals(bot, update, args):
                     
                     msg = (
                         'Train: {name}\n'
-                        'Train Number: {number}'
-                        'Scheduled Arrival: {scharr}'
-                        'Actual Arrival: {actarr}'
-                        'Delay in Arrival: {delayarr}'
-                        'Scheduled Departure: {schdep}'
-                        'Actual Departure: {actdep}'
+                        'Train Number: {number}\n'
+                        'Scheduled Arrival: {scharr}\n'
+                        'Actual Arrival: {actarr}\n'
+                        'Delay in Arrival: {delayarr}\n'
+                        'Scheduled Departure: {schdep}\n'
+                        'Actual Departure: {actdep}\n'
                         'Delay in Departure: {delaydep}'
                         ).format(
                             name = train_name,
@@ -324,6 +324,7 @@ def main():
     dp.add_handler(CommandHandler("code",code))
     dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
     dp.add_handler(CommandHandler("live", live, pass_args=True))
+    dp.add_handler(CommandHandler("arrivals", arrivals, pass_args=True))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
