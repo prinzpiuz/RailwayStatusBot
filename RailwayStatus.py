@@ -289,10 +289,11 @@ def arrivals(bot, update, args):
                 alert = "No arriving trains during {} hours".format(hrs)
                 update.message.reply_text(alert)
 
-def available_seats(bot, update, args):
+def seats(bot, update, args):
     """
     Get train seats availability.
-    Required args are the train number and the date
+    Required args are Train Number, Source Stn Code, 
+    Destination Stn Code, Journey Date, Pref Code, Quota Code
     """
     http = urllib3.PoolManager()
     try:
@@ -300,7 +301,7 @@ def available_seats(bot, update, args):
     except ValueError as exc:
         update.message.reply_text(
             'Need Train Number, Source Stn Code, Destination Stn Code, Journey Date, Pref Code, Quota Code'
-            'eg: /available_seats 12017 NDLS DDN 08-10-2018 CC GEN'
+            'eg: /seats 12017 NDLS DDN 08-10-2018 CC GEN'
             )
     else:
         # for now we won't implement a date validator
@@ -378,7 +379,7 @@ def help(bot, update):
       /arrivals sbc 4
       /arrivals awy 2
       to check seats availability for a train
-      /available_seats 12017 NDLS DDN 08-10-2018 CC GEN
+      /seats 12017 NDLS DDN 08-10-2018 CC GEN
 """
 
     update.message.reply_text(help)
@@ -394,7 +395,7 @@ def main():
     dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
     dp.add_handler(CommandHandler("live", live, pass_args=True))
     dp.add_handler(CommandHandler("arrivals", arrivals, pass_args=True))
-    dp.add_handler(CommandHandler("available_seats", available_seats, pass_args=True))
+    dp.add_handler(CommandHandler("seats", seats, pass_args=True))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
