@@ -1,4 +1,4 @@
-stationcode="""                                                                                                                                                                                         
+stationcode="""                                                                                                                                                                      
 ALLP    Alappuzha
 AWY     Aluva
 CLT     Calicut
