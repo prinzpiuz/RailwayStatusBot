@@ -227,8 +227,8 @@ def arrivals(bot, update, args):
     except ValueError as exc:
         update.message.reply_text(
             'only need station code and hours window'
-            'eg: /arrivals 12046 2'
-            'eg: /arrivals 12046 4'
+            'eg: /arrivals sbc 2'
+            'eg: /arrivals awy 4'
             )
     else:
         # for now we won't implement a date validator
@@ -294,8 +294,6 @@ def help(bot, update):
 
 
     help = """
-      what this bot can do ..?
-      this bot helps to get services offered by  NTES
       available commands and their usage 
       for listings trains between stations use 
       /trains <start> <destination>
@@ -310,6 +308,9 @@ def help(bot, update):
       /pnr <pnr no>
       for getting live train status
       /live train# 15-08-2018
+      for list trains arriving in a station in comming hrs
+      /arrivals sbc 4
+      /arrivals awy 2
 """
 
     update.message.reply_text(help)
