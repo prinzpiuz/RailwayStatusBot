@@ -301,18 +301,18 @@ def seats(bot, update, args):
     except ValueError as exc:
         update.message.reply_text(
             'Need Train Number, Source Stn Code, Destination Stn Code, Journey Date, Pref Code, Quota Code'
-            'eg: /seats 12017 NDLS DDN 08-10-2018 CC GEN'
+            'eg: /seats 12017 NDLS DDN 18-10-2018 CC GN'
             )
     else:
         # for now we won't implement a date validator
         LIVE = (
             'https://api.railwayapi.com/v2/check-seat'
             '/train/{train}'
-            '/source/{src_station}',
-            '/dest/{dest_station}',
-            '/date/{jourey_date}',
-            '/pref/{pref_code}',
-            '/quota/{quota_code}',
+            '/source/{src_station}'
+            '/dest/{dest_station}'
+            '/date/{jourey_date}'
+            '/pref/{pref_code}'
+            '/quota/{quota_code}'
             '/apikey/{key}'
             ).format(
                 train=train_name,
@@ -325,6 +325,7 @@ def seats(bot, update, args):
                 )
         r = http.request('GET', LIVE)
         data = json.loads(r.data.decode('utf-8'))
+       
         if data['response_code'] != 200:
             alert = "something went wrong"
             update.message.reply_text(alert)
@@ -333,6 +334,7 @@ def seats(bot, update, args):
             dest_stn_name = data['to_station']['name']
             journey_class_name = data['journey_class']['name']
             quota_name = data['quota']['name']
+            train_name = data['train']['name']
             availability = data['availability']
             availability_status_combn = {avl['date']:avl['status'] for avl in availability}
             availability_str = str(availability_status_combn).replace('{','')\
@@ -340,6 +342,7 @@ def seats(bot, update, args):
                                                              .replace("'",'')\
                                                              .replace(',','\n')
             msg = (
+                    'Train Name : {name}\n'
                     'From : {source}\n'
                     'To : {dest}\n'
                     'Class : {pref}\n'
@@ -347,6 +350,7 @@ def seats(bot, update, args):
                     'Availability: \n'
                     '{availability}'
                     ).format(
+                        name=train_name,
                         source=src_stn_name,
                         dest=dest_stn_name,
                         pref=journey_class_name,
