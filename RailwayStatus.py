@@ -289,6 +289,77 @@ def arrivals(bot, update, args):
                 alert = "No arriving trains during {} hours".format(hrs)
                 update.message.reply_text(alert)
 
+def seats(bot, update, args):
+    """
+    Get train seats availability.
+    Required args are Train Number, Source Stn Code, 
+    Destination Stn Code, Journey Date, Pref Code, Quota Code
+    """
+    http = urllib3.PoolManager()
+    try:
+        train_name, src_stn_code, dest_stn_code, journey_date, pref, quota = args
+    except ValueError as exc:
+        update.message.reply_text(
+            'Need Train Number, Source Stn Code, Destination Stn Code, Journey Date, Pref Code, Quota Code'
+            'eg: /seats 12017 NDLS DDN 18-10-2018 CC GN'
+            )
+    else:
+        # for now we won't implement a date validator
+        LIVE = (
+            'https://api.railwayapi.com/v2/check-seat'
+            '/train/{train}'
+            '/source/{src_station}'
+            '/dest/{dest_station}'
+            '/date/{jourey_date}'
+            '/pref/{pref_code}'
+            '/quota/{quota_code}'
+            '/apikey/{key}'
+            ).format(
+                train=train_name,
+                src_station=src_stn_code,
+                dest_station=dest_stn_code,
+                jourey_date=journey_date,
+                pref_code=pref,
+                quota_code=quota,
+                key=key
+                )
+        r = http.request('GET', LIVE)
+        data = json.loads(r.data.decode('utf-8'))
+       
+        if data['response_code'] != 200:
+            alert = "something went wrong"
+            update.message.reply_text(alert)
+        else:
+            src_stn_name = data['from_station']['name']
+            dest_stn_name = data['to_station']['name']
+            journey_class_name = data['journey_class']['name']
+            quota_name = data['quota']['name']
+            train_name = data['train']['name']
+            availability = data['availability']
+            availability_status_combn = {avl['date']:avl['status'] for avl in availability}
+            availability_str = str(availability_status_combn).replace('{','')\
+                                                             .replace('}','')\
+                                                             .replace("'",'')\
+                                                             .replace(',','\n')
+            msg = (
+                    'Train Name : {name}\n'
+                    'From : {source}\n'
+                    'To : {dest}\n'
+                    'Class : {pref}\n'
+                    'Quota : {quota}\n'
+                    'Availability: \n'
+                    '{availability}'
+                    ).format(
+                        name=train_name,
+                        source=src_stn_name,
+                        dest=dest_stn_name,
+                        pref=journey_class_name,
+                        quota=quota_name,
+                        availability=availability_str
+                        )
+
+            update.message.reply_text(msg)
+
 
 def help(bot, update):
 
@@ -311,6 +382,8 @@ def help(bot, update):
       for list trains arriving in a station in comming hrs
       /arrivals sbc 4
       /arrivals awy 2
+      to check seats availability for a train
+      /seats 12017 NDLS DDN 08-10-2018 CC GEN
 """
 
     update.message.reply_text(help)
@@ -326,6 +399,7 @@ def main():
     dp.add_handler(CommandHandler("pnr",pnr,pass_args=True))
     dp.add_handler(CommandHandler("live", live, pass_args=True))
     dp.add_handler(CommandHandler("arrivals", arrivals, pass_args=True))
+    dp.add_handler(CommandHandler("seats", seats, pass_args=True))
     updater.start_polling()
     updater.idle()
 if __name__ == '__main__':
