@@ -41,16 +41,15 @@ Patna Junction (PNBE)
 
 HELP_TEXT = """
     what this bot can do ..?
-    this bot helps to get services offered by  NTES
-    maintained by @prinzpiuz 
-    for more news subscribe to my channel @princepiuz   
+    This bot helps to get services offered by  NTES
+    [National Train Enquiry System] 
+    Maintained By https://t.me/RailgadiBotDiscussions
     for help please enter /help 
     source code is available @
     https://github.com/prinzpiuz/RailwayStatusBot
     suggetions and contributions are always welcome
     #FreeAsInFreedom
-    NB:as part of privacy this bot never collects or store any kind data of users
-
+    NB:as part of privacy this bot never collects or store any kind of users data
     """
 import logging
 logging.basicConfig(
